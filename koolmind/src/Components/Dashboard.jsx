@@ -36,10 +36,10 @@ const Dashboard = () => {
     const [list, setList] = useState(true)
     const [mode, setMode] = useState('add');
     const [formData, setFormData] = useState({
-        name: '' || 'test',
-        email: '' || 'test@example.com',
-        phone: '' || 123456789,
-        salary: '' || 1000,
+        name: '' ,
+        email: '' ,
+        phone: '',
+        salary: '',
     });
 
     const handleChange = (e) => {
@@ -52,8 +52,11 @@ const Dashboard = () => {
 
     const handleSave = () => {
         if (mode === 'add') {
+            if(formData.name !== '')
+            {
             axios.post('https://fair-teal-peacock-wrap.cyclic.app/employees', formData)
                 .then(function (res) {
+                    onClose();
                     toast({
                         title: 'Employee Added',
                         description: 'New Employee has been added.',
@@ -61,10 +64,31 @@ const Dashboard = () => {
                         duration: 3000,
                         isClosable: true,
                     });
+
                     getData()
+                    
+                }) .catch(function (error) {
+                    toast({
+                        title: 'Field Empty',
+                        description: 'Please enter all fields',
+                        status: 'error',
+                        duration: 3000,
+                        isClosable: true,
+                    });
+                  });
+                
+            }else{
+                toast({
+                    title: 'Field Empty',
+                    description: 'Please enter details first.',
+                    status: 'error',
+                    duration: 3000,
+                    isClosable: true,
                 });
+            }
         }
         else if (mode === 'edit' && employeeId) {
+            
             axios.put(`https://fair-teal-peacock-wrap.cyclic.app/employees/${employeeId}`, formData)
                 .then(function (res) {
                     toast({
@@ -75,9 +99,10 @@ const Dashboard = () => {
                         isClosable: true,
                     });
                     getData()
+                    onClose();
                 });
         }
-        onClose();
+        
     };
 
     const getData = () => {
@@ -138,7 +163,7 @@ const Dashboard = () => {
                     duration: 3000,
                     isClosable: true,
                 });
-                setData(res.data);
+                setUser(res.data);
                 setList(false)
             });
     }
@@ -255,7 +280,7 @@ const Dashboard = () => {
                             alt="Line"
                             src="https://anima-uploads.s3.amazonaws.com/projects/64ba37388ed3d27d1a66710d/releases/64f381a5dc310b348588391b/img/line-2.svg"
                         />
-                        {data && <div key={data._id} className="btn" onClick={() => handleSalary(data._id)}>
+                        {data && <div key={user._id} className="btn" onClick={() => handleSalary(user._id)}>
                             <div className="overlap">
                                 <button className="text-wrapper-12">INCREMENT SALARY</button>
                             </div>

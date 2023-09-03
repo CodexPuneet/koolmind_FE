@@ -46,15 +46,22 @@ const EmployeeModal = ({id,handleMore,handleModal, change}) => {
                             status: 'success',
                             duration: 3000,
                             isClosable: true,
-                        });
+                        })
                         if (handleMore) {
                             handleMore(id);
                         }
-                        
-                    });
-                    handleModal(!change)
-                    
-            onClose();
+                        onClose();
+                        handleModal(!change)
+                    }).catch(function (error) {
+                        toast({
+                            title: 'Field Empty',
+                            description: 'Please fill data',
+                            status: 'error',
+                            duration: 3000,
+                            isClosable: true,
+                        });
+                      });
+
                 }
                 else{
                     toast({
