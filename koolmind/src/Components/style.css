@@ -177,18 +177,15 @@
     font-family: "Montserrat", Helvetica;
     font-size: 14px;
     font-weight: 500;
-    left: 713px;
+    left: 213px;
     top: 23px;
-    letter-spacing: 0;
     line-height: normal;
     position: absolute;
-    text-align:center;
     background-color: #a600d0;
     border-radius: 4px;
     height: 35px;
     position: relative;
     width: 98px;
-    padding-top:8px;
   }
 
   .index .trash {
@@ -348,7 +345,6 @@
     height: 55px;
     position: relative;
     width: 192px;
-    padding-top:18px;
   }
   
   .index .sliders-v-square {
@@ -612,6 +608,17 @@
     height: 55px;
     position: relative;
     width: 192px;
-    padding-top:18px;
 
+  }
+  .address{
+    color: #ffffff;
+    font-family: "Montserrat", Helvetica;
+    font-size: 14px;
+    font-weight: 500;
+    background-color: #a600d0;
+    border-radius: 4px;
+    height: 46px;
+    width: 192px;
+  padding-bottom: 5px;
+  margin-top: 10px;
   }

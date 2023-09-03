@@ -16,20 +16,22 @@ import {
     Center
 } from '@chakra-ui/react'
 import { useToast } from '@chakra-ui/react'
-
+import EmployeeModal from './EmployeeModal';
 
 const Dashboard = () => {
     const [employeeId, setEmployeeId] = useState(null);
+    const [details, setDetails] = useState(false);
     const { isOpen, onOpen, onClose } = useDisclosure()
     const toast = useToast()
     const initialRef = React.useRef(null)
     const finalRef = React.useRef(null)
     const [data, setData] = useState([])
+    const [user, setUser] = useState([])
     const [moreData, setMoreData] = useState({
-        "country": "India",
-        "state": "UP",
-        "city": "Noida",
-        "pincode": 110096,
+        country: "India",
+        state: "UP",
+        city: "Noida",
+        pincode: 110096,
     })
     const [list, setList] = useState(true)
     const [mode, setMode] = useState('add');
@@ -114,25 +116,16 @@ const Dashboard = () => {
     const handleMore = (employeeId) => {
         axios.get(`https://fair-teal-peacock-wrap.cyclic.app/employees/${employeeId}`)
             .then(function (res) {
-
-                setData(res.data.employee);
+                setEmployeeId(employeeId);
+                setUser(res.data.employee);
                 setMoreData(res.data.employeeDetails)
                 setList(false)
-
             });
     }
     const handleDash = () => {
-        getData();
-        toast({
-            title: 'Back to Dashboard',
-            description: 'Redirecting... Please wait',
-            status: 'warning',
-            duration: 3000,
-            isClosable: true,
-        });
-        setTimeout(() => {
-            setList(true);
-        }, 1000);
+        getData()
+        setList(true);
+      
 
     }
     const handleSalary = (employeeId) => {
@@ -149,12 +142,14 @@ const Dashboard = () => {
                 setList(false)
             });
     }
+    const handleModal =()=>{
+        setDetails(!details)
+    }
 
     useEffect(() => {
         getData()
-
     }, []);
-    console.log(data, moreData);
+   
     return (
         <div className="index">
             <div className="div">
@@ -180,19 +175,19 @@ const Dashboard = () => {
                                     <div className="text-wrapper-8">{employee.email}</div>
                                     <div className="text-wrapper-9">{employee.phone}</div>
                                     <div className="text-wrapper-10">{employee.salary}</div>
-                                    <div className="text-wrapper-11" onClick={() => handleMore(employee._id)}>See More</div>
-                                    <img
+                                    <button className="text-wrapper-11" onClick={() => handleMore(employee._id)}>See More</button>
+                                    <button><img
                                         className="trash"
                                         alt="Trash"
                                         src="https://anima-uploads.s3.amazonaws.com/projects/64ba37388ed3d27d1a66710d/releases/64f381a5dc310b348588391b/img/trash-1.svg"
                                         onClick={() => handleDelete(employee._id)}
-                                    />
-                                    <img
+                                    /></button>
+                                    <button><img
                                         className="pen"
                                         alt="Pen"
                                         src="https://anima-uploads.s3.amazonaws.com/projects/64ba37388ed3d27d1a66710d/releases/64f381a5dc310b348588391b/img/pen-1.svg"
                                         onClick={() => handleEdit(employee._id)}
-                                    />
+                                    /></button>
                                 </div>
                             ))}
                         </div>
@@ -203,7 +198,7 @@ const Dashboard = () => {
                         />
                         <div className="btn" onClick={handleAdd}>
                             <div className="overlap">
-                                <div className="text-wrapper-12">ADD NEW EMPLOYEE</div>
+                                <button className="text-wrapper-12">ADD NEW EMPLOYEE</button>
                             </div>
                         </div>
                         <img
@@ -215,7 +210,7 @@ const Dashboard = () => {
                         <div className="text-wrapper">Employee Details</div>
                         <div className="th">
                             {data && (
-                                <div key={data._id} className="div-3">
+                                <div key={user._id} className="div-3">
                                     <Center>
                                         <img
                                             className="profile_single"
@@ -224,29 +219,29 @@ const Dashboard = () => {
                                         />
                                     </Center>
                                     <Center>
-                                        <div className='employee'>Name : {data?.name}</div>
+                                        <div className='employee'>Name : {user?.name}</div>
                                     </Center>
                                     <Center>
 
-                                        <div className='employee'>Email : {data?.email}</div>
+                                        <div className='employee'>Email : {user?.email}</div>
                                     </Center>
                                     <Center>
 
-                                        <div className='employee'>Contact : {data?.phone}</div>
+                                        <div className='employee'>Contact : {user?.phone}</div>
                                     </Center>
                                     <Center>
 
-                                        <div className='employee'>Salary : {data?.salary}<b>Rs</b></div>
+                                        <div className='employee'>Salary : {user?.salary}<b>Rs</b></div>
                                     </Center>
 
-                                  
-                                    <Center>{moreData !== null ? <div>
-                                        <div className='employee'>Country : {moreData?.country}</div>
-                                        <div className='employee'>State : {moreData?.state}</div>
-                                        <div className='employee'>City : {moreData?.city}</div>
-                                        <div className='employee'>PinCode : {moreData?.pincode}</div>
-                                        </div>:<div className="address">Add Details</div>}
-                                        </Center>
+                                    {moreData !== null ?
+                                        <Center>
+                                            <div className='employee'>Country : {moreData?.country}</div>
+                                            <div className='employee'>State : {moreData?.state}</div>
+                                            <div className='employee'>City : {moreData?.city}</div>
+                                            <div className='employee'>PinCode : {moreData?.pincode}</div>
+
+                                        </Center> : <button className="address" onClick={handleModal}>Add Employee Address</button>}
 
                                  
 
@@ -262,7 +257,7 @@ const Dashboard = () => {
                         />
                         {data && <div key={data._id} className="btn" onClick={() => handleSalary(data._id)}>
                             <div className="overlap">
-                                <div className="text-wrapper-12">INCREMENT SALARY</div>
+                                <button className="text-wrapper-12">INCREMENT SALARY</button>
                             </div>
                         </div>}
 
@@ -278,20 +273,20 @@ const Dashboard = () => {
                     <div className="navlinks">
 
                         <Center className="overlap-group">
-                            {list ? <div> 
+                            {list ? <div>
 
-                                <div className="text-wrapper-13">Homepage</div></div> : <div> 
+                                <button className="text-wrapper-13">Homepage</button></div> : <div>
 
-                                <div className="text-wrapper-13">{data.name}</div></div>}
+                                <button className="text-wrapper-13">{user?.name}</button></div>}
 
                         </Center>
                         {
-                            !list &&  <div className="redirct" onClick={handleDash}>
-                            
-                            Jump to Home
-                        </div>
+                            !list && <button className="redirct" onClick={handleDash}>
+
+                                Jump to Home
+                            </button>
                         }
-                       
+
                     </div>
                     <div className="logo">
                         <div className="text-wrapper-20">KoolMind CRUD</div>
@@ -386,6 +381,8 @@ const Dashboard = () => {
                     </ModalFooter>
                 </ModalContent>
             </Modal>
+            {details && <EmployeeModal id={employeeId} handleMore={handleMore} handleModal={setDetails} change={details} />}
+                  
         </div>
     );
 };
