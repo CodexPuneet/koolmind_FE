@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import "./style.css";
-import axios from 'axios';
+import axios from 'axios'; 
 import {
     Modal,
     ModalOverlay,
@@ -29,7 +29,7 @@ const Dashboard = () => {
     const [user, setUser] = useState([])
     const [moreData, setMoreData] = useState({
         country: "India",
-        state: "UP",
+        state: "Uttar Pradesh",
         city: "Noida",
         pincode: 110096,
     })
